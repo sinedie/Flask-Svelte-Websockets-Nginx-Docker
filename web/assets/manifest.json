@@ -1,0 +1,8 @@
+{
+  "background_color": "#ffffff",
+  "theme_color": "#E938C2",
+  "name": "Routify app",
+  "short_name": "Routify app",
+  "start_url": "/",
+  "display": "standalone"
+}

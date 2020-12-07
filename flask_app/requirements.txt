@@ -1,0 +1,8 @@
+Flask
+flask-socketio
+flask-sqlalchemy
+psycopg2-binary
+python-dotenv
+gunicorn
+eventlet
+celery[redis]
