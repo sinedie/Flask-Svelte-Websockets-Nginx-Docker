@@ -1,0 +1,1 @@
+from flask_app.celery_worker.worker import *

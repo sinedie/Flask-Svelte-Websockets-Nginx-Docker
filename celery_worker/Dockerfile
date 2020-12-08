@@ -1,6 +1,5 @@
 FROM python:3.8-alpine
 
-# layer caching for faster builds
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
 

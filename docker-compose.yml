@@ -1,17 +1,13 @@
 version: "3"
 services:
-    flask_app:
-        build: ./flask_app
-        container_name: flask_app
+    backend:
+        build: ./backend
+        container_name: backend
         restart: on-failure
-        environment:
-            - REDIS_URL=redis
-            - REDIS_PORT=6379
         depends_on:
             - redis
             - db
-        expose:
-            - 5000
+        env_file: ./backend/.env
     celery_worker:
         build: ./celery_worker
         container_name: celery_worker
@@ -19,10 +15,12 @@ services:
         user: nobody
         depends_on:
             - redis
-            - flask_app
+            - backend
+        env_file: ./celery_worker/.env
     db:
         image: postgres:12-alpine
         container_name: postgres
+        restart: on-failure
         ports:
             - 5432:5432
         env_file: ./database/db.conf
@@ -42,7 +40,7 @@ services:
         ports:
             - 80:80
         depends_on:
-            - flask_app
+            - backend
 
 volumes:
   data:
