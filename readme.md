@@ -4,7 +4,7 @@ Created in a learning process and for quick development using websockets in micr
 
 Mean to be as simple as possible. (KISS)
 
-## Used tecnologies
+## Used technologies
 - Flask-SocketIO
 - Flask-SQLAlchemy
 - Gunicorn
