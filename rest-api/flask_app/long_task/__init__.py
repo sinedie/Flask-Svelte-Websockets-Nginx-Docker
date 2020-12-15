@@ -1,0 +1,1 @@
+from flask_app.long_task.routes import *

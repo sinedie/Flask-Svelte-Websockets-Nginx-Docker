@@ -1,26 +1,56 @@
 version: "3"
 services:
-    backend:
-        build: ./backend
-        container_name: backend
+    rest-api:
+        build: ./rest-api
+        container_name: rest-api
         restart: on-failure
         depends_on:
             - redis
             - db
-        env_file: ./backend/.env
-    celery_worker:
-        build: ./celery_worker
-        container_name: celery_worker
+        env_file: ./rest-api/.env
+        # TODO erase ports. only use for tests
+        ports:
+            - 5001:5000
+    ws-api:
+        build: ./ws-api
+        container_name: ws-api
+        restart: on-failure
+        depends_on:
+            - redis
+        env_file: ./rest-api/.env
+    celery-worker:
+        build: ./celery-worker
+        container_name: celery-worker
         restart: on-failure
         user: nobody
         depends_on:
             - redis
-            - backend
-        env_file: ./celery_worker/.env
+        env_file: ./celery-worker/.env
+    frontend:
+        build: ./frontend
+        container_name: frontend
+        restart: on-failure
+        depends_on:
+            - rest-api
+            - ws-api
+    nginx:
+        image: nginx:alpine
+        container_name: LBA
+        restart: on-failure
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+        ports:
+            - 80:80
+        depends_on:
+            - rest-api
+            - ws-api
+            - frontend
     db:
         image: postgres:12-alpine
         container_name: postgres
         restart: on-failure
+        volumes:
+            - /postgres-data:/var/lib/postgresql/data
         ports:
             - 5432:5432
         env_file: ./database/db.conf
@@ -30,17 +60,3 @@ services:
         restart: on-failure
         ports:
             - 6379:6379
-    nginx:
-        image: nginx:alpine
-        container_name: nginx
-        restart: on-failure
-        volumes:
-            - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-            - ./web/dist:/usr/share/nginx/html
-        ports:
-            - 80:80
-        depends_on:
-            - backend
-
-volumes:
-  data:

@@ -1,7 +1,0 @@
-Flask
-flask-socketio
-flask-sqlalchemy
-psycopg2-binary
-gunicorn
-eventlet
-celery[redis]

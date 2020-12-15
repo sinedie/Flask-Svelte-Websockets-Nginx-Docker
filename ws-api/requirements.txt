@@ -1,0 +1,4 @@
+Flask
+flask-socketio
+gunicorn[eventlet]
+redis
